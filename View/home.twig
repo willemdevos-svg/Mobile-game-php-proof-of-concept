@@ -12,9 +12,34 @@
     </li>
     <li>Damage output: {{data.damage_outp}}</li>
 </ul>
-<a href="index.php?action=energyToMoney" class="c-btn">Turn your Energy into money.</a>
-<a href="index.php?action=moneyToDamage" class="c-btn">Upgrade damage output for money (min 5).</a>
-<a href="index.php?action=startBattle" id="battleStart" class="c-btn">Start a battle for 20 energy.</a>
+
+<div style="display:flex;justify-content:center;">
+    <ul>
+        <li>
+            <a href="index.php?action=energyToMoney" class="c-btn">Turn your Energy into money.</a>
+        </li>
+        <li>
+            <a href="index.php?action=moneyToDamage" class="c-btn">Upgrade damage output for money (min 5).</a>
+        </li>
+        <li>
+            <a href="index.php?action=startBattle" id="battleStart" class="c-btn">Start a battle for 20 energy.</a>
+        </li>
+    </ul>
+    <img src="public/userSkins/{{skin}}.webp" width="320" height="660" alt="player">
+    <form action="index.php?action=changeSkin" method="post">
+        ChangeSkin :
+        <select name="skin" id="skin">
+            <option value="fg">Female Grey</option>
+            <option value="fb">Female Blue</option>
+            <option value="fp">Female Pink</option>
+            <option value="mg">Male Grey</option>
+            <option value="mb">Male Blue</option>
+            <option value="mp">Male Pink</option>
+        </select>
+        <input type="submit" value="Change" />
+    </form>
+</div>
+
 
 <script>
 // Arteficial display of timeTokens counter.

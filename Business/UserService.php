@@ -29,4 +29,9 @@ class UserService
         $userDAO = new UserDAO();
         return $userDAO->getUserById($id);
     }
+    public function updateSkin(int $id, string $newSkin)
+    {
+        $userDataDAO = new UserDAO();
+        $userDataDAO->updateSkin($id, $newSkin);
+    }
 }

@@ -10,13 +10,15 @@ class User
     private string $userName;
     private string $email;
     private string $password;
+    private string $skin;
 
-    public function __construct(int $id, string $userName, string $email, string $password)
+    public function __construct(int $id, string $userName, string $email, string $password, string $skin)
     {
         $this->id = $id;
         $this->userName = $userName;
         $this->email = $email;
         $this->password = $password;
+        $this->skin = $skin;
     }
 
     function getId(): int
@@ -32,6 +34,11 @@ class User
     function getEmail(): string
     {
         return $this->email;
+    }
+
+    function getSkin(): string
+    {
+        return $this->skin;
     }
 
     function getPassword(): string

@@ -67,28 +67,34 @@ class UserDataDAO
         $dbh = null;
     }
     public function calculateBattleOutcome(int $userId, int $enemyId)
-{
-    $dbh = new PDO(
-        DBConfig::$DB_CONNSTRING,
-        DBConfig::$DB_USERNAME,
-        DBConfig::$DB_PASSWORD
-    );
+    {
+        function addMoney($amount){
+            
+        }
+        $dbh = new PDO(
+            DBConfig::$DB_CONNSTRING,
+            DBConfig::$DB_USERNAME,
+            DBConfig::$DB_PASSWORD
+        );
 
-    // UPDATE user cooldown/energy timer
-    $updateSql = "
-        UPDATE mg_userdata
-        SET energy_lt = DATE_ADD(energy_lt, INTERVAL 20 SECOND)
-        WHERE id = :user_id
-    ";
+        // UPDATE user energy
+        $updateSql = "UPDATE mg_userdata
+                SET energy_lt = CASE
+                WHEN energy_lt < NOW() - INTERVAL 100 SECOND
+                    THEN NOW() - INTERVAL 80 SECOND
+                ELSE
+                     energy_lt + INTERVAL 20 SECOND
+                END
+                WHERE id = :user_id;";
 
-    $updateStmt = $dbh->prepare($updateSql);
+        $updateStmt = $dbh->prepare($updateSql);
 
-    $updateStmt->execute([
-        ':user_id' => $userId
-    ]);
+        $updateStmt->execute([
+            ':user_id' => $userId
+        ]);
 
-    // SELECT battle outcome
-    $selectSql = "
+        // SELECT return battle outcome
+        $selectSql = "
         SELECT
             u.id AS user_id,
             e.id AS enemy_id,
@@ -108,30 +114,32 @@ class UserDataDAO
         AND e.id = :enemy_id
     ";
 
-    $stmt = $dbh->prepare($selectSql);
+        $stmt = $dbh->prepare($selectSql);
 
-    $stmt->execute([
-        ':user_id' => $userId,
-        ':enemy_id' => $enemyId
-    ]);
+        $stmt->execute([
+            ':user_id' => $userId,
+            ':enemy_id' => $enemyId
+        ]);
 
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $dbh = null;
+        if (!$result) {
+            return 'unknown';
+        }
 
-    // Safety check
-    if (!$result) {
+        if ($result['user_wins']) {
+            // UPDATE user money
+            $updateStmt = $dbh->prepare("update mg_userdata set money = money + 50 where id = :user_id;");
+            $updateStmt->execute([':user_id' => $userId]);
+            $dbh = null;
+            return 'user';
+        }
+
+        if ($result['enemy_wins']) {
+            $dbh = null;
+            return 'enemy';
+        }
+        $dbh = null;
         return 'draw';
     }
-
-    if ($result['user_wins']) {
-        return 'user';
-    }
-
-    if ($result['enemy_wins']) {
-        return 'enemy';
-    }
-
-    return 'draw';
-}
 }

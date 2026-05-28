@@ -35,6 +35,10 @@ class UserDataService
                 return 'won';
             case 'enemy':
                 return 'lost';
+            case 'unknown':
+                return 'unknown';
+            case 'end':
+                return 'end';
             default:
                 return 'draw';
         }
