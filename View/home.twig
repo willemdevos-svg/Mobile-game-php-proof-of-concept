@@ -1,0 +1,44 @@
+<h1>Home</h1>
+<ul>
+    <li>Last time you used energy:{{data.energy_lt|date('Y-m-d H:i:s')}}</li>
+    <li>
+        Energy(SQL): {{data.spendEnergy}}
+    </li>
+    <li>
+        Total Spend Energy: <span id="counter">{{lastEnergy}}</span>
+    </li>
+    <li>
+        Money: {{data.money}}
+    </li>
+    <li>Damage output: {{data.damage_outp}}</li>
+</ul>
+<a href="index.php?action=energyToMoney" class="c-btn">Turn your Energy into money.</a>
+<a href="index.php?action=moneyToDamage" class="c-btn">Upgrade damage output for money (min 5).</a>
+<a href="index.php?action=startBattle" id="battleStart" class="c-btn">Start a battle for 20 energy.</a>
+
+<script>
+// Arteficial display of timeTokens counter.
+//Via head inladen lukt niet??
+console.log('js');
+const counterElement = document.getElementById("counter");
+const battleStartBtn = document.getElementById("battleStart");
+let count = parseInt(counterElement.textContent, 10);
+const max = 100;
+if (count > max) {
+    count = max;
+    counterElement.textContent = count;
+    
+} else {
+    battleStartBtn.classList.add('c-btn__inactive');
+    const interval = setInterval(() => {
+        count++;
+        counterElement.textContent = count;
+        if (count >= max) {
+            clearInterval(interval);
+        }
+        if(count > 20 ){
+            battleStartBtn.classList.remove('c-btn__inactive');
+        }
+    }, 1000);
+}
+</script>
