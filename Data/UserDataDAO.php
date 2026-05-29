@@ -147,11 +147,9 @@ class UserDataDAO
             case $result['user_wins']:
                 $updateStmt = $dbh->prepare("update mg_userdata set money = money + 50 where id = :user_id;");
                 $updateStmt->execute([':user_id' => $userId]);
-                $dbh = null;
                 $winnaar = 'user';
                 break;
             case $result['enemy_wins']:
-                $dbh = null;
                 $winnaar =  'enemy';
                 break;
             default:
