@@ -68,9 +68,7 @@ class UserDataDAO
     }
     public function calculateBattleOutcome(int $userId, int $enemyId)
     {
-        function addMoney($amount){
-            
-        }
+        function addMoney($amount) {}
         $dbh = new PDO(
             DBConfig::$DB_CONNSTRING,
             DBConfig::$DB_USERNAME,
@@ -123,23 +121,44 @@ class UserDataDAO
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$result) {
-            return 'unknown';
-        }
+        // if (!$result) {
+        //     return 'unknown';
+        // }
 
-        if ($result['user_wins']) {
-            // UPDATE user money
-            $updateStmt = $dbh->prepare("update mg_userdata set money = money + 50 where id = :user_id;");
-            $updateStmt->execute([':user_id' => $userId]);
-            $dbh = null;
-            return 'user';
-        }
+        // if ($result['user_wins']) {
+        //     // UPDATE user money
+        //     $updateStmt = $dbh->prepare("update mg_userdata set money = money + 50 where id = :user_id;");
+        //     $updateStmt->execute([':user_id' => $userId]);
+        //     $dbh = null;
+        //     return 'user';
+        // }
 
-        if ($result['enemy_wins']) {
-            $dbh = null;
-            return 'enemy';
+        // if ($result['enemy_wins']) {
+        //     $dbh = null;
+        //     return 'enemy';
+        // }
+        // $dbh = null;
+        // return 'draw';
+
+        switch (true) {
+            case !$result:
+                $winnaar =  'unknown';
+                break;
+            case $result['user_wins']:
+                $updateStmt = $dbh->prepare("update mg_userdata set money = money + 50 where id = :user_id;");
+                $updateStmt->execute([':user_id' => $userId]);
+                $dbh = null;
+                $winnaar = 'user';
+                break;
+            case $result['enemy_wins']:
+                $dbh = null;
+                $winnaar =  'enemy';
+                break;
+            default:
+                $winnaar =  'draw';
+                break;
         }
         $dbh = null;
-        return 'draw';
+        return $winnaar;
     }
 }

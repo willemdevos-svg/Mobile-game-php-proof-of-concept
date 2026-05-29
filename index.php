@@ -77,6 +77,7 @@ if (isset($_GET["action"])) {
             break;
         default:
             header("Location:index.php");
+            // onmogelijk om hier te geraken.
             exit;
     }
 }
@@ -103,5 +104,6 @@ switch ($pageFlag) {
             array("data" => $currentUserData, "lastEnergy" => $secondsSinceLastEnergy)
         );
 }
+
 
 print $twig->render("footer.twig");

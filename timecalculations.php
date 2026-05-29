@@ -15,9 +15,9 @@ class DBDataHandler
 
     public function __construct($userId)
     {
-        $this->dbConn = "mysql:host=localhost;dbname=cursusphp;charset=utf8";
-        $this->dbUsername = "cursusgebruiker";
-        $this->dbPassword = "cursuspwd";
+        $this->dbConn = "mysql:host=localhost;dbname=153willem;charset=utf8";
+        $this->dbUsername = "root";
+        $this->dbPassword = "";
         $this->userId = $userId;
     }
     public function getUserId()
@@ -48,6 +48,7 @@ class DBDataHandler
         $dbh = null;
         return $data;
     }
+
     public function addData($query, $arrData)
     {
         $dbh = new PDO($this->dbConn, $this->dbUsername, $this->dbPassword);
@@ -64,7 +65,10 @@ class DBDataHandler
 
         $dbh = new PDO($this->dbConn, $this->dbUsername, $this->dbPassword);
         $stmt = $dbh->prepare("update userdata SET money = money + :money WHERE id = :userId");
-        $stmt->execute([':money' => $moneyToAdd, ':userId' => $this->userId]);
+        $stmt->execute([
+            ':money' => $moneyToAdd,
+            ':userId' => $this->userId
+        ]);
         $dbh = null;
     }
     public function resetTimeTokens()
@@ -83,17 +87,32 @@ class DBDataHandler
         $dbh = null;
     }
 }
+
+
 $dbdh = new DBDataHandler(2);
 if (isset($_GET["action"])) {
     switch ($_GET["action"]) {
         case 'timeToMoney':
             $dbdh->timeToMoney();
             break;
+        default:
+            echo "jan";
     }
+
+    // switch ($variable) {
+    //     case 'value':
+    //         # code...
+    //         break;
+        
+    //     default:
+    //         # code...
+    //         break;
+    // }
     header("Location:timecalculations.php");
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 
