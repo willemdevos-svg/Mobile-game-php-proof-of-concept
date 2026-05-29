@@ -2,10 +2,13 @@
 <ul>
     <li>Last time you used energy:{{data.energy_lt|date('Y-m-d H:i:s')}}</li>
     <li>
-        Energy(SQL): {{data.spendEnergy}}
+        Total Spend Energy(SQL): {{data.spendEnergy}}
     </li>
     <li>
-        Total Spend Energy: <span id="counter">{{lastEnergy}}</span>
+        Energy: <span id="counter">{{lastEnergy}}</span>
+        <div class="c-energyBar">
+            <div class="c-energyBar__visual" id="counterBar"></div>
+        </div>
     </li>
     <li>
         Money: {{data.money}}
@@ -42,28 +45,41 @@
 
 
 <script>
-// Arteficial display of timeTokens counter.
-//Via head inladen lukt niet??
 console.log('js');
+
 const counterElement = document.getElementById("counter");
+const counterSecondaryElement = document.getElementById("counterBar");
+
 const battleStartBtn = document.getElementById("battleStart");
+
 let count = parseInt(counterElement.textContent, 10);
+
 const max = 100;
+
+function updateCounters(value) {
+    counterElement.textContent = value;
+    counterSecondaryElement.style.width = `${value}%`;
+}
+
 if (count > max) {
     count = max;
-    counterElement.textContent = count;
-    
+    updateCounters(count);
 } else {
     battleStartBtn.classList.add('c-btn__inactive');
+
     const interval = setInterval(() => {
         count++;
-        counterElement.textContent = count;
+
+        updateCounters(count);
+
         if (count >= max) {
             clearInterval(interval);
         }
-        if(count > 20 ){
+
+        if (count > 20) {
             battleStartBtn.classList.remove('c-btn__inactive');
         }
+
     }, 1000);
 }
 </script>

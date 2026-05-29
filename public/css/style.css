@@ -10,6 +10,18 @@ header {
     justify-content: space-between;
 }
 
+.c-energyBar {
+    width: 6rem;
+    height: 0.5rem;
+    border: 1px solid red;
+}
+
+.c-energyBar__visual {
+    height: 100%;
+    width: 0%;
+    background-color: orange;
+}
+
 .c-btn {
     border: 2px solid orange;
     background-color: rgb(255, 221, 157);
@@ -30,6 +42,6 @@ header {
 
 footer {
     background-color: black;
-    color:white;
-    padding:1rem;
+    color: white;
+    padding: 1rem;
 }
